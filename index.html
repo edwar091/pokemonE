@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="jour">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planches — collection Diamant &amp; Perle / Platine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --perle:#F6F7FA; --carte:#FFFFFF; --platine:#DFE4EC; --platine-2:#EDF0F5;
+  --encre:#131826; --encre-2:#5C6679; --encre-3:#8892A6;
+  --diamant:#2F6FED; --manquant:#D6293E; --acquis:#0E9F6E; --indet:#C3CAD7;
+  --r-Commune:#8892A6; --r-Peucommune:#4B8FD6; --r-Rare:#D99A16;
+  --r-Holographique:#CE4A92; --r-Ultrarare:#7C5CF0; --r-Secrete:#DD6630;
+  --ombre:0 1px 2px rgba(19,24,38,.06),0 6px 20px -8px rgba(19,24,38,.14);
+  --ombre-f:0 8px 40px -10px rgba(19,24,38,.28);
+  --rayon:10px;
+  --display:'Archivo',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+html[data-theme="nuit"]{
+  --perle:#0E1220; --carte:#161C2C; --platine:#2A3245; --platine-2:#1E2536;
+  --encre:#EEF1F7; --encre-2:#A3ADC0; --encre-3:#79839A; --indet:#3A4358;
+  --ombre:0 1px 2px rgba(0,0,0,.4),0 6px 20px -8px rgba(0,0,0,.6);
+  --ombre-f:0 8px 40px -10px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--perle); color:var(--encre); font-family:var(--body);
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:var(--diamant)}
+:focus-visible{outline:2px solid var(--diamant);outline-offset:2px;border-radius:4px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{
+  font-family:var(--display);font-size:10px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--encre-3);font-stretch:112%;
+}
+
+/* ---------- en-tête ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;background:var(--perle);background:color-mix(in srgb,var(--perle) 88%,transparent);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--platine);
+}
+.topbar-in{max-width:1220px;margin:0 auto;padding:12px 20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.mark{display:flex;flex-direction:column;gap:1px;margin-right:2px}
+.mark b{
+  font-family:var(--display);font-stretch:118%;font-weight:800;font-size:17px;
+  letter-spacing:-.02em;line-height:1;
+}
+.mark span{font-size:10.5px;color:var(--encre-3);letter-spacing:.02em}
+.jauge{flex:1 1 220px;min-width:180px;display:flex;flex-direction:column;gap:5px}
+.jauge-txt{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:12px;color:var(--encre-2)}
+.jauge-txt b{font-family:var(--mono);font-size:13px;color:var(--encre);font-weight:600}
+.rail{height:7px;border-radius:99px;background:var(--platine);overflow:hidden;position:relative}
+.fill{
+  height:100%;border-radius:99px;width:0%;transition:width .5s cubic-bezier(.4,0,.2,1);
+  background:linear-gradient(100deg,#2F6FED,#48C3E6 22%,#7CE0B4 40%,#F0D66B 58%,#EE8FC4 76%,#8B6BF3);
+  background-size:260% 100%;animation:holo 9s linear infinite;
+}
+@keyframes holo{to{background-position:260% 0}}
+.tools{display:flex;gap:8px;align-items:center}
+.champ{position:relative;display:flex;align-items:center}
+.champ svg{position:absolute;left:10px;width:15px;height:15px;color:var(--encre-3);pointer-events:none}
+#q{
+  width:250px;padding:8px 30px 8px 31px;border-radius:99px;border:1px solid var(--platine);
+  background:var(--carte);font-size:13.5px;
+}
+#q::placeholder{color:var(--encre-3)}
+#q:focus{outline:none;border-color:var(--diamant);box-shadow:0 0 0 3px color-mix(in srgb,var(--diamant) 15%,transparent)}
+.raccourci{position:absolute;right:9px;font-size:10px;color:var(--encre-3);font-family:var(--mono);pointer-events:none}
+.ico{
+  width:34px;height:34px;display:grid;place-items:center;border-radius:9px;
+  border:1px solid var(--platine);background:var(--carte);color:var(--encre-2);
+}
+.ico:hover{color:var(--encre);border-color:var(--encre-3)}
+.ico svg{width:16px;height:16px}
+
+/* ---------- onglets ---------- */
+.onglets{max-width:1220px;margin:0 auto;padding:0 20px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.onglets::-webkit-scrollbar{display:none}
+.onglet{
+  padding:13px 14px 11px;font-family:var(--display);font-weight:600;font-size:13px;
+  color:var(--encre-3);border-bottom:2px solid transparent;white-space:nowrap;letter-spacing:.01em;
+}
+.onglet:hover{color:var(--encre-2)}
+.onglet[aria-selected="true"]{color:var(--encre);border-bottom-color:var(--diamant)}
+.onglet i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--encre-3);margin-left:6px}
+
+main{max-width:1220px;margin:0 auto;padding:24px 20px 90px}
+.vue{display:none}
+.vue.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ---------- planches ---------- */
+.bloc-titre{display:flex;align-items:baseline;gap:12px;margin:26px 0 12px}
+.bloc-titre:first-child{margin-top:0}
+.bloc-titre h2{
+  font-family:var(--display);font-stretch:112%;font-weight:700;font-size:15px;margin:0;letter-spacing:-.01em;
+}
+.bloc-titre hr{flex:1;border:0;border-top:1px solid var(--platine);margin:0}
+.bloc-titre em{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--encre-3)}
+
+.planche{
+  background:var(--carte);border:1px solid var(--platine);border-radius:var(--rayon);
+  padding:16px 16px 14px;margin-bottom:12px;box-shadow:var(--ombre);
+}
+.planche.masque{display:none}
+.pl-tete{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.pl-num{
+  font-family:var(--mono);font-size:11px;font-weight:600;color:var(--encre-3);
+  border:1px solid var(--platine);border-radius:6px;padding:3px 6px;line-height:1;margin-top:3px;
+}
+.pl-nom{flex:1;min-width:160px}
+.pl-nom h3{font-family:var(--display);font-stretch:108%;font-weight:700;font-size:16px;margin:0 0 2px;letter-spacing:-.01em}
+.pl-nom p{margin:0;font-size:11.5px;color:var(--encre-3)}
+.pl-chiffres{display:flex;gap:16px;align-items:center}
+.pl-chiffre{text-align:right}
+.pl-chiffre b{display:block;font-family:var(--mono);font-size:16px;font-weight:600;line-height:1.2}
+.pl-chiffre span{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--encre-3);font-weight:600}
+.pl-chiffre.manque b{color:var(--manquant)}
+.pl-chiffre.pct b{color:var(--diamant)}
+.pl-rail{height:4px;border-radius:99px;background:var(--platine);overflow:hidden;margin-bottom:12px}
+.pl-rail div{height:100%;background:var(--diamant);border-radius:99px;transition:width .4s}
+
+.grille{display:flex;flex-wrap:wrap;gap:3px}
+.case{
+  width:27px;height:27px;border-radius:5px;display:grid;place-items:center;
+  font-family:var(--mono);font-size:10px;font-weight:500;line-height:1;
+  background:var(--platine-2);color:var(--encre-3);border:1px solid transparent;
+  transition:transform .12s,box-shadow .12s;position:relative;
+}
+.case.possedee{color:var(--encre-3);opacity:.72;cursor:pointer}
+.case.manquante{background:var(--manquant);color:#fff;font-weight:600;cursor:pointer}
+.case.obtenue{background:var(--acquis);color:#fff;font-weight:600;cursor:pointer}
+.case.indeterminee{
+  cursor:pointer;color:var(--encre-3);
+  background:repeating-linear-gradient(45deg,var(--platine-2),var(--platine-2) 3px,var(--indet) 3px,var(--indet) 5px);
+}
+.case:hover{transform:translateY(-2px);box-shadow:0 4px 10px -3px rgba(19,24,38,.35);z-index:2}
+.case.sp{width:auto;padding:0 6px;min-width:34px}
+.case.trouve{box-shadow:0 0 0 2px var(--carte),0 0 0 4px var(--diamant);z-index:3}
+.case.fade{opacity:.22}
+.case.pop{animation:pop .32s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.42)}100%{transform:scale(1)}}
+.legende{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--encre-2)}
+.legende i{width:11px;height:11px;border-radius:3px;display:inline-block;vertical-align:-1px;margin-right:5px}
+.avis{
+  margin-top:11px;padding:9px 11px;border-radius:8px;background:var(--platine-2);
+  font-size:12px;color:var(--encre-2);border-left:3px solid var(--indet);
+}
+
+/* ---------- filtres ---------- */
+.barre{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px;
+  padding:12px;background:var(--carte);border:1px solid var(--platine);border-radius:var(--rayon);
+}
+.puce{
+  padding:5px 11px;border-radius:99px;border:1px solid var(--platine);background:transparent;
+  font-size:12px;font-weight:500;color:var(--encre-2);display:inline-flex;align-items:center;gap:6px;
+}
+.puce:hover{border-color:var(--encre-3)}
+.puce[aria-pressed="true"]{background:var(--encre);color:var(--perle);border-color:var(--encre)}
+.puce i{width:8px;height:8px;border-radius:99px;display:inline-block}
+select.puce{padding-right:8px}
+.sep{width:1px;height:20px;background:var(--platine)}
+.compte{margin-left:auto;font-size:12px;color:var(--encre-3);font-family:var(--mono)}
+
+/* ---------- table cartes ---------- */
+.tableau{background:var(--carte);border:1px solid var(--platine);border-radius:var(--rayon);overflow:hidden;box-shadow:var(--ombre)}
+table{width:100%;border-collapse:collapse}
+thead th{
+  text-align:left;font-family:var(--display);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  font-weight:700;color:var(--encre-3);padding:10px 12px;background:var(--platine-2);
+  border-bottom:1px solid var(--platine);white-space:nowrap;cursor:pointer;
+}
+thead th:hover{color:var(--encre)}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--platine-2);font-size:13.5px;vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--platine-2)}
+tbody tr.fait td{color:var(--encre-3)}
+tbody tr.fait .nom{text-decoration:line-through}
+.tag{
+  display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600;
+  color:#fff;white-space:nowrap;
+}
+.tagf{background:var(--platine-2);color:var(--encre-2);border:1px solid var(--platine)}
+.coche{
+  width:22px;height:22px;border-radius:6px;border:1.5px solid var(--platine);display:grid;place-items:center;
+  color:transparent;background:var(--carte);
+}
+.coche:hover{border-color:var(--acquis)}
+.coche.on{background:var(--acquis);border-color:var(--acquis);color:#fff}
+.coche svg{width:12px;height:12px}
+.vide{padding:44px 20px;text-align:center;color:var(--encre-3)}
+.vide b{display:block;font-family:var(--display);font-size:15px;color:var(--encre);margin-bottom:5px}
+
+/* ---------- achats ---------- */
+.deux{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+.panneau{background:var(--carte);border:1px solid var(--platine);border-radius:var(--rayon);padding:16px;box-shadow:var(--ombre)}
+.panneau h3{font-family:var(--display);font-stretch:108%;font-size:14px;margin:0 0 12px;font-weight:700}
+.prix-ligne{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.prix-ligne label{flex:1;font-size:12.5px;display:flex;align-items:center;gap:7px}
+.prix-ligne input{
+  width:78px;padding:5px 8px;border:1px solid var(--platine);border-radius:7px;background:var(--perle);
+  font-family:var(--mono);font-size:12.5px;text-align:right;
+}
+.prix-ligne input:focus{outline:none;border-color:var(--diamant)}
+.prix-ligne em{font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--encre-3);width:34px;text-align:right}
+.total{
+  margin-top:12px;padding-top:12px;border-top:1px solid var(--platine);
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.total b{font-family:var(--mono);font-size:20px;font-weight:600}
+.liste-achat{margin-bottom:14px}
+.la-tete{display:flex;align-items:baseline;gap:10px;padding:9px 12px;background:var(--platine-2);border-radius:8px 8px 0 0;border:1px solid var(--platine);border-bottom:0}
+.la-tete b{font-family:var(--display);font-size:13px;font-stretch:108%}
+.la-tete em{font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--encre-3);margin-left:auto}
+.la-corps{border:1px solid var(--platine);border-radius:0 0 8px 8px;overflow:hidden}
+.la-ligne{display:flex;align-items:center;gap:10px;padding:7px 12px;border-bottom:1px solid var(--platine-2);font-size:13px}
+.la-ligne:last-child{border-bottom:0}
+.la-ligne:hover{background:var(--platine-2)}
+.la-num{font-family:var(--mono);font-weight:600;font-size:12px;min-width:38px}
+.la-nom{flex:1}
+.lien{
+  font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--platine);
+  color:var(--encre-2);text-decoration:none;white-space:nowrap;
+}
+.lien:hover{border-color:var(--diamant);color:var(--diamant)}
+
+/* ---------- stats ---------- */
+.stats-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.bar-serie{display:grid;grid-template-columns:150px 1fr 84px;gap:10px;align-items:center;margin-bottom:7px;font-size:12.5px}
+.bar-serie .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-serie .r{height:15px;background:var(--platine-2);border-radius:4px;overflow:hidden}
+.bar-serie .r div{height:100%;background:var(--diamant);border-radius:4px;transition:width .5s}
+.bar-serie .v{font-family:var(--mono);font-size:11.5px;color:var(--encre-2);text-align:right}
+.empile{display:flex;height:26px;border-radius:7px;overflow:hidden;margin-bottom:12px}
+.empile div{transition:flex-grow .4s}
+.leg-rar{display:flex;flex-direction:column;gap:6px}
+.leg-rar div{display:flex;align-items:center;gap:8px;font-size:12.5px}
+.leg-rar i{width:10px;height:10px;border-radius:3px}
+.leg-rar b{margin-left:auto;font-family:var(--mono);font-weight:600}
+.leg-rar em{font-style:normal;font-family:var(--mono);color:var(--encre-3);font-size:11.5px;width:44px;text-align:right}
+
+/* ---------- tiroir ---------- */
+.voile{position:fixed;inset:0;background:rgba(19,24,38,.42);opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
+.voile.on{opacity:1;pointer-events:auto}
+.tiroir{
+  position:fixed;top:0;right:0;height:100%;width:378px;max-width:100%;background:var(--carte);
+  box-shadow:var(--ombre-f);z-index:51;transform:translateX(102%);transition:transform .26s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+}
+.tiroir.on{transform:none}
+.ti-tete{padding:18px 20px 14px;border-bottom:1px solid var(--platine);display:flex;gap:12px;align-items:flex-start}
+.ti-tete .gros{
+  font-family:var(--mono);font-size:26px;font-weight:600;line-height:1;letter-spacing:-.02em;
+}
+.ti-tete h3{font-family:var(--display);font-stretch:108%;font-size:15px;margin:0 0 3px;font-weight:700}
+.ti-tete p{margin:0;font-size:12px;color:var(--encre-3)}
+.ti-corps{padding:18px 20px;overflow-y:auto;flex:1}
+.ti-bloc{margin-bottom:20px}
+.ti-bloc>.eyebrow{display:block;margin-bottom:8px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;width:100%;
+  padding:11px 14px;border-radius:9px;font-weight:600;font-size:13.5px;margin-bottom:7px;
+  border:1px solid var(--platine);background:var(--carte);color:var(--encre);
+}
+.btn:hover{border-color:var(--encre-3)}
+.btn svg{width:15px;height:15px}
+.btn.vert{background:var(--acquis);border-color:var(--acquis);color:#fff}
+.btn.vert:hover{filter:brightness(1.07)}
+.btn.rouge{background:var(--manquant);border-color:var(--manquant);color:#fff}
+.btn.rouge:hover{filter:brightness(1.07)}
+.btn.mini{width:auto;padding:7px 12px;font-size:12.5px;margin:0}
+.btn.danger{color:var(--manquant)}
+.champ-l{display:block;margin-bottom:10px}
+.champ-l span{display:block;font-size:11.5px;color:var(--encre-2);margin-bottom:4px;font-weight:500}
+.champ-l input,.champ-l select,.champ-l textarea{
+  width:100%;padding:8px 10px;border:1px solid var(--platine);border-radius:8px;
+  background:var(--perle);font-size:13.5px;
+}
+.champ-l input:focus,.champ-l select:focus,.champ-l textarea:focus{outline:none;border-color:var(--diamant)}
+.rangee{display:flex;gap:8px}
+.rangee>*{flex:1}
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);z-index:60;
+  background:var(--encre);color:var(--perle);padding:11px 14px;border-radius:11px;
+  display:flex;align-items:center;gap:14px;box-shadow:var(--ombre-f);font-size:13.5px;
+  transition:transform .3s cubic-bezier(.2,1.2,.4,1);max-width:calc(100% - 32px);
+}
+.toast.on{transform:translate(-50%,0)}
+.toast button{color:#8FB6FF;font-weight:600;font-size:13px;white-space:nowrap}
+
+.pied{max-width:1220px;margin:0 auto;padding:0 20px 40px;font-size:11.5px;color:var(--encre-3);line-height:1.7}
+.pied b{color:var(--encre-2)}
+
+@media(max-width:860px){
+  .deux{grid-template-columns:1fr}
+  #q{width:150px}
+  .bar-serie{grid-template-columns:104px 1fr 74px}
+  .tiroir{width:100%;top:auto;bottom:0;height:88%;border-radius:16px 16px 0 0;transform:translateY(102%)}
+  .tiroir.on{transform:none}
+  .col-opt{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+@media print{
+  .topbar,.onglets,.barre,.tiroir,.voile,.toast,.pied,.no-print{display:none !important}
+  body{background:#fff}
+  .vue{display:none !important}
+  .vue.on{display:block !important}
+  .panneau,.la-corps,.la-tete{box-shadow:none;border-color:#ccc}
+  .deux{grid-template-columns:1fr}
+  .lien{display:none}
+  main{padding:0}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="mark">
+      <b>Diamant &amp; Perle · Platine</b>
+      <span>Suivi de collection — 11 séries, 2007-2009</span>
+    </div>
+    <div class="jauge">
+      <div class="jauge-txt"><span>Collection complète à</span><b id="jPct">—</b></div>
+      <div class="rail"><div class="fill" id="jFill"></div></div>
+      <div class="jauge-txt"><span id="jTxt">—</span></div>
+    </div>
+    <div class="tools">
+      <div class="champ">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Chercher un nom, un numéro…" autocomplete="off">
+        <span class="raccourci">/</span>
+      </div>
+      <button class="ico" id="bTheme" title="Jour / nuit" aria-label="Basculer jour / nuit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+      <button class="ico" id="bDonnees" title="Données et sauvegarde" aria-label="Données et sauvegarde">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav class="onglets" role="tablist">
+    <button class="onglet" role="tab" data-vue="planches" aria-selected="true">Les planches</button>
+    <button class="onglet" role="tab" data-vue="cartes" aria-selected="false">Les cartes <i id="nCartes"></i></button>
+    <button class="onglet" role="tab" data-vue="achats" aria-selected="false">Liste d’achats</button>
+    <button class="onglet" role="tab" data-vue="stats" aria-selected="false">Statistiques</button>
+  </nav>
+</header>
+
+<main>
+  <section class="vue on" id="v-planches"></section>
+
+  <section class="vue" id="v-cartes">
+    <div class="barre no-print" id="filtres"></div>
+    <div class="tableau"><table>
+      <thead><tr>
+        <th data-tri="serie">Série</th>
+        <th data-tri="n">N°</th>
+        <th data-tri="nom">Nom</th>
+        <th data-tri="r">Rareté</th>
+        <th data-tri="pr" class="col-opt">Priorité</th>
+        <th data-tri="st">Statut</th>
+        <th style="width:40px"></th>
+      </tr></thead>
+      <tbody id="tbCartes"></tbody>
+    </table></div>
+  </section>
+
+  <section class="vue" id="v-achats"></section>
+  <section class="vue" id="v-stats"></section>
+</main>
+
+<footer class="pied">
+  <p><b>Données</b> — reprises de votre fichier Excel : 228 cartes listées, 11 séries, 1 361 cartes au total.
+  Rien n’est envoyé nulle part, tout reste dans ce navigateur. Pensez à exporter une sauvegarde de temps en temps.</p>
+  <p><b>Périmètre des planches</b> — les cartes secrètes SH et RT sont placées en fin de planche. Répartition retenue :
+  Tempête 103 + SH1-3, Platine 130 + SH4-6, Vainqueurs Suprêmes 150 + SH7-9, Rivaux Émergeants 114 + RT1-6.
+  Corrigez les totaux dans l’onglet Données si votre édition diffère.</p>
+</footer>
+
+<div class="voile" id="voile"></div>
+<aside class="tiroir" id="tiroir" role="dialog" aria-modal="true" aria-label="Détail"></aside>
+<div class="toast" id="toast" role="status"><span id="toastTxt"></span><button id="toastBtn">Annuler</button></div>
+
+<script>
+const DATA = {"series":[{"i":0,"n":1,"ext":"Diamant et Perle","nom":"Diamant et Perle","sortie":"mai 2007","total":130,"nl":0,"sp":[]},{"i":1,"n":2,"ext":"Diamant et Perle","nom":"Trésors Mystérieux","sortie":"août 2007","total":124,"nl":0,"sp":[]},{"i":2,"n":3,"ext":"Diamant et Perle","nom":"Merveilles Secrètes","sortie":"nov. 2007","total":132,"nl":0,"sp":[]},{"i":3,"n":4,"ext":"Diamant et Perle","nom":"Duels au Sommet","sortie":"févr. 2008","total":106,"nl":0,"sp":[]},{"i":4,"n":5,"ext":"Diamant et Perle","nom":"Aube Majestueuse","sortie":"mai 2008","total":100,"nl":0,"sp":[]},{"i":5,"n":6,"ext":"Diamant et Perle","nom":"Éveil des Légendes","sortie":"août 2008","total":146,"nl":0,"sp":[]},{"i":6,"n":7,"ext":"Diamant et Perle","nom":"Tempête","sortie":"nov. 2008","total":106,"nl":0,"sp":["SH1","SH2","SH3"]},{"i":7,"n":8,"ext":"Platine","nom":"Platine","sortie":"févr. 2009","total":133,"nl":0,"sp":["SH4","SH5","SH6"]},{"i":8,"n":9,"ext":"Platine","nom":"Rivaux Émergeants","sortie":"mai 2009","total":120,"nl":0,"sp":["RT1","RT2","RT3","RT4","RT5","RT6"]},{"i":9,"n":10,"ext":"Platine","nom":"Vainqueurs Suprêmes","sortie":"août 2009","total":153,"nl":0,"sp":["SH7","SH8","SH9"]},{"i":10,"n":11,"ext":"Platine","nom":"Arceus","sortie":"nov. 2009","total":111,"nl":108,"sp":[]}],"cartes":[{"si":0,"r":"Commune","n":"71","nom":"Manzai","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Commune","n":"73","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Commune","n":"83","nom":"chaglam","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Commune","n":"126","nom":"energie electrique","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Commune","n":"127","nom":"energie psy","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Commune","n":"128","nom":"energie combat","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Peu commune","n":"66","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Rare","n":"19","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Rare","n":"20","nom":"castorno","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Rare","n":"23","nom":"drascore","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Rare","n":"25","nom":"papinox","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Rare","n":"31","nom":"mackogneur","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Rare","n":"33","nom":"goinfrex","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Rare","n":"35","nom":"pachirisu","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Rare","n":"37","nom":"ronflex","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Rare","n":"39","nom":"apireine","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Rare","n":"41","nom":"qubutoké","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Rare","n":"42","nom":"okéoké","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Holographique","n":"1","nom":"diagla","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Holographique","n":"2","nom":"noctunoir","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Holographique","n":"3","nom":"elekable","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Holographique","n":"7","nom":"luxray","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Holographique","n":"9","nom":"manaphy","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Holographique","n":"10","nom":"magireve","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Holographique","n":"14","nom":"tengalice","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Holographique","n":"15","nom":"moufflair","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Holographique","n":"16","nom":"etouraptor","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Ultra-rare","n":"120","nom":"pingoléon","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Ultra-rare","n":"121","nom":"simiabraz","st":"m","pr":"","d":null,"px":null,"note":""},{"si":0,"r":"Ultra-rare","n":"122","nom":"torterra","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Commune","n":"71","nom":"galekid","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Commune","n":"72","nom":"barloche","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Commune","n":"98","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Commune","n":"100","nom":"stalgamin","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Peu commune","n":"42","nom":"korillon","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Peu commune","n":"47","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Peu commune","n":"48","nom":"carmache","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Peu commune","n":"49","nom":"girafarig","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Peu commune","n":"54","nom":"magmar","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Peu commune","n":"65","nom":"zarbi ( E )","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Peu commune","n":"113","nom":"maintenance nocturne","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Peu commune","n":"119","nom":"energie obscurité","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Rare","n":"20","nom":"migalos","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Rare","n":"24","nom":"noadkoko","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Rare","n":"28","nom":"elecsprint","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Rare","n":"32","nom":"feunard","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Rare","n":"35","nom":"simularbre","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Rare","n":"36","nom":"coatox","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Rare","n":"37","nom":"zarbi ( I )","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Rare","n":"40","nom":"barbicha","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Holographique","n":"3","nom":"capidextre","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Holographique","n":"4","nom":"créfadet","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Holographique","n":"7","nom":"celebi","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Holographique","n":"8","nom":"aligatueur","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Holographique","n":"10","nom":"corboss","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Holographique","n":"11","nom":"luminéon","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Holographique","n":"12","nom":"maganon","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Holographique","n":"14","nom":"créfollet","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Holographique","n":"15","nom":"raichu","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Holographique","n":"17","nom":"tyranocif","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Ultra-rare","n":"122","nom":"lucario","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Ultra-rare","n":"123","nom":"maganon","st":"m","pr":"","d":null,"px":null,"note":""},{"si":1,"r":"Secrète","n":"124","nom":"altération espace-temps","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Commune","n":"79","nom":"cheniti cape sable","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Commune","n":"107","nom":"sancoki mer occident","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Commune","n":"109","nom":"caratroc","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Peu commune","n":"49","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Peu commune","n":"61","nom":"rattatac","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Peu commune","n":"68","nom":"zarbi ( K)","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Peu commune","n":"70","nom":"zarbi ( O)","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Peu commune","n":"129","nom":"énergie obscurité","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Peu commune","n":"130","nom":"énergie métal","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Rare","n":"22","nom":"arcanin","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Rare","n":"29","nom":"grolem","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Rare","n":"36","nom":"posipi","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Rare","n":"39","nom":"zarbi ( S)","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Rare","n":"42","nom":"cheniselle","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Rare","n":"44","nom":"xatu","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Holographique","n":"3","nom":"dracaufeu","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Holographique","n":"4","nom":"entei","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Holographique","n":"10","nom":"ho-oh","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Holographique","n":"14","nom":"lugia","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Holographique","n":"15","nom":"mew","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Holographique","n":"16","nom":"raikou","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Holographique","n":"17","nom":"roserade","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Holographique","n":"18","nom":"drattak","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Holographique","n":"19","nom":"suicune","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Ultra-rare","n":"131","nom":"gardevoir","st":"m","pr":"","d":null,"px":null,"note":""},{"si":2,"r":"Ultra-rare","n":"132","nom":"corboss","st":"m","pr":"","d":null,"px":null,"note":""},{"si":3,"r":"Commune","n":"52","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":3,"r":"Rare","n":"3","nom":"wailord","st":"m","pr":"","d":null,"px":null,"note":""},{"si":3,"r":"Rare","n":"20","nom":"krabbos","st":"m","pr":"","d":null,"px":null,"note":""},{"si":3,"r":"Holographique","n":"5","nom":"pachirisu","st":"m","pr":"","d":null,"px":null,"note":""},{"si":3,"r":"Ultra-rare","n":"103","nom":"cresselia","st":"m","pr":"","d":null,"px":null,"note":""},{"si":3,"r":"Ultra-rare","n":"104","nom":"darkrai","st":"m","pr":"","d":null,"px":null,"note":""},{"si":3,"r":"Ultra-rare","n":"105","nom":"diagla","st":"m","pr":"","d":null,"px":null,"note":""},{"si":3,"r":"Ultra-rare","n":"106","nom":"palkia","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Peu commune","n":"94","nom":"énergie santé","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Rare","n":"19","nom":"pyroli","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Rare","n":"22","nom":"simiabraz","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Rare","n":"24","nom":"phyllali","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Rare","n":"27","nom":"phione","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Rare","n":"31","nom":"coatox","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Holographique","n":"2","nom":"cressellia","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Holographique","n":"3","nom":"darkrai","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Holographique","n":"4","nom":"diagla","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Holographique","n":"5","nom":"givrali","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Holographique","n":"8","nom":"manaphy","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Holographique","n":"9","nom":"mewtwo","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Holographique","n":"11","nom":"palkia","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Holographique","n":"12","nom":"phione","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Ultra-rare","n":"97","nom":"carchacrok","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Ultra-rare","n":"98","nom":"givrali","st":"m","pr":"","d":null,"px":null,"note":""},{"si":4,"r":"Ultra-rare","n":"99","nom":"phyllali","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Commune","n":"87","nom":"loupio","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Commune","n":"96","nom":"ortide","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Commune","n":"122","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Peu commune","n":"48","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Peu commune","n":"49","nom":"morphéo (type eau)","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Peu commune","n":"64","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Peu commune","n":"135","nom":"mont abrupt","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"18","nom":"armaldo","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"23","nom":"delcatty","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"24","nom":"deoxys forme attaque","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"25","nom":"deoxys forme défense","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"26","nom":"deoxys forme vitesse","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"31","nom":"jirachi","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"32","nom":"kyogre","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"35","nom":"tartard","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"36","nom":"regice","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"38","nom":"regirock","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"40","nom":"munja","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Rare","n":"41","nom":"chartor","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Holographique","n":"8","nom":"luxray","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Holographique","n":"11","nom":"mewtwo","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Holographique","n":"12","nom":"tarpaud","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Holographique","n":"15","nom":"regigigas","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Holographique","n":"16","nom":"spiritomb","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Ultra-rare","n":"140","nom":"créfadet","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Ultra-rare","n":"141","nom":"scorvol","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Ultra-rare","n":"142","nom":"magnézone","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Ultra-rare","n":"143","nom":"créfollet","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Ultra-rare","n":"144","nom":"mewtwo","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Ultra-rare","n":"145","nom":"rhinastoc","st":"m","pr":"","d":null,"px":null,"note":""},{"si":5,"r":"Ultra-rare","n":"146","nom":"créhelf","st":"m","pr":"","d":null,"px":null,"note":""},{"si":6,"r":"Rare","n":"14","nom":"ceriflor","st":"m","pr":"","d":null,"px":null,"note":""},{"si":6,"r":"Rare","n":"23","nom":"roserade","st":"m","pr":"","d":null,"px":null,"note":""},{"si":6,"r":"Ultra-rare","n":"96","nom":"noctunoir","st":"m","pr":"","d":null,"px":null,"note":""},{"si":6,"r":"Ultra-rare","n":"97","nom":"heatran","st":"m","pr":"","d":null,"px":null,"note":""},{"si":6,"r":"Ultra-rare","n":"98","nom":"mackogneur","st":"m","pr":"","d":null,"px":null,"note":""},{"si":6,"r":"Ultra-rare","n":"100","nom":"regigigas","st":"m","pr":"","d":null,"px":null,"note":""},{"si":6,"r":"Secrète","n":"102","nom":"reptincel","st":"m","pr":"","d":null,"px":null,"note":""},{"si":6,"r":"Secrète","n":"103","nom":"dracaufeu","st":"m","pr":"","d":null,"px":null,"note":""},{"si":6,"r":"Secrète","n":"SH1","nom":"baudrive","st":"m","pr":"","d":null,"px":null,"note":""},{"si":6,"r":"Secrète","n":"SH2","nom":"skelenox","st":"m","pr":"","d":null,"px":null,"note":""},{"si":6,"r":"Secrète","n":"SH3","nom":"voltorbe","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Peu commune","n":"58","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Rare","n":"32","nom":"mélokrik","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Rare","n":"33","nom":"coudlangue","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Rare","n":"36","nom":"feunard","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Holographique","n":"3","nom":"brasegli","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Holographique","n":"4","nom":"delcatty","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Holographique","n":"5","nom":"dialga","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Holographique","n":"7","nom":"dialga","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Holographique","n":"9","nom":"giratina","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Holographique","n":"10","nom":"giratina","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Holographique","n":"11","nom":"elecsprint","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Holographique","n":"12","nom":"palkia","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Holographique","n":"13","nom":"charkos","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Ultra-rare","n":"123","nom":"drascore","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Ultra-rare","n":"124","nom":"giratina","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Ultra-rare","n":"125","nom":"palkia","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Ultra-rare","n":"126","nom":"shaymin","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Ultra-rare","n":"127","nom":"shaymin","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Secrète","n":"128","nom":"elektek","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Secrète","n":"130","nom":"insécateur","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Secrète","n":"SH5","nom":"tylton","st":"m","pr":"","d":null,"px":null,"note":""},{"si":7,"r":"Secrète","n":"SH6","nom":"goupix","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Commune","n":"60","nom":"pyroli","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Rare","n":"19","nom":"pyroli","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Rare","n":"22","nom":"tritosor","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Rare","n":"23","nom":"grolem","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Rare","n":"33","nom":"ronflex","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Rare","n":"34","nom":"aquali","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Holographique","n":"1","nom":"arcanin","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Holographique","n":"6","nom":"","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Holographique","n":"7","nom":"jirachi","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Holographique","n":"11","nom":"charkos","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Ultra-rare","n":"103","nom":"alakazam","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Ultra-rare","n":"104","nom":"mustéflott","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Ultra-rare","n":"106","nom":"gallame","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Ultra-rare","n":"107","nom":"hippodocus","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Ultra-rare","n":"108","nom":"simiabraz","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Ultra-rare","n":"109","nom":"luxray","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Ultra-rare","n":"111","nom":"ronflex","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Secrète","n":"112","nom":"pikachu","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Secrète","n":"113","nom":"pikachu volant","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Secrète","n":"RT1","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Secrète","n":"RT3","nom":"motisma chaleur","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Secrète","n":"RT4","nom":"motisma tonte","st":"m","pr":"","d":null,"px":null,"note":""},{"si":8,"r":"Secrète","n":"RT6","nom":"le choix de pluton","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Commune","n":"111","nom":"","st":"o","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Peu commune","n":"71","nom":"negapi","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Rare","n":"17","nom":"papilusion","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Rare","n":"27","nom":"pingoléon","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Rare","n":"30","nom":"coudlangue","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Rare","n":"31","nom":"lucario","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Rare","n":"37","nom":"m,mime","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Rare","n":"41","nom":"tenefix","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Rare","n":"45","nom":"solaroc","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Rare","n":"47","nom":"wailord","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Rare","n":"48","nom":"electhor","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Holographique","n":"1","nom":"absol","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Holographique","n":"2","nom":"brasegali","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Holographique","n":"6","nom":"maganon","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Holographique","n":"8","nom":"rayquaza","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Holographique","n":"11","nom":"etouraptor","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Holographique","n":"14","nom":"yanmega","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Ultra-rare","n":"141","nom":"absol","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Ultra-rare","n":"142","nom":"brasegali","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Ultra-rare","n":"144","nom":"elekable","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Ultra-rare","n":"145","nom":"carchacrok","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Ultra-rare","n":"147","nom":"etouraptor","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Secrète","n":"149","nom":"sulfura","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Secrète","n":"150","nom":"electhor","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Secrète","n":"SH7","nom":"milobellus","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Secrète","n":"SH8","nom":"relicath","st":"m","pr":"","d":null,"px":null,"note":""},{"si":9,"r":"Secrète","n":"SH9","nom":"yamma","st":"m","pr":"","d":null,"px":null,"note":""}]};
+
+/* ===== stockage : window.storage (artefact) → localStorage → mémoire ===== */
+const CLE='pokedex-dp-platine-v1';
+const memoire={};
+const store={
+  async get(k){
+    if(window.storage&&window.storage.get){try{const r=await window.storage.get(k);return r?JSON.parse(r.value):null}catch(e){}}
+    try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){}
+    return memoire[k]??null;
+  },
+  async set(k,v){
+    const s=JSON.stringify(v);
+    if(window.storage&&window.storage.set){try{await window.storage.set(k,s);return}catch(e){}}
+    try{localStorage.setItem(k,s);return}catch(e){}
+    memoire[k]=v;
+  }
+};
+
+const RARETES=['Commune','Peu commune','Rare','Holographique','Ultra-rare','Secrète'];
+const CVAR={'Commune':'--r-Commune','Peu commune':'--r-Peucommune','Rare':'--r-Rare',
+  'Holographique':'--r-Holographique','Ultra-rare':'--r-Ultrarare','Secrète':'--r-Secrete'};
+const cR=r=>`var(${CVAR[r]||'--encre-3'})`;
+const PRIOS={'Haute':'#D6293E','Moyenne':'#D99A16','Basse':'#8892A6'};
+
+let S=null, vue='planches', tri={cle:'serie',sens:1}, undo=null, tmr=null;
+let F={q:'',rar:new Set(),serie:'',statut:'m',prio:''};
+
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+const jour=()=>new Date().toISOString().slice(0,10);
+const frDate=d=>d?d.split('-').reverse().join('/'):'';
+
+function neuf(){
+  return {v:1,theme:'jour',prix:{},
+    series:DATA.series.map(s=>({...s})),
+    cartes:DATA.cartes.map((c,i)=>({id:i+1,...c}))};
+}
+const serie=i=>S.series[i];
+const cartesDe=i=>S.cartes.filter(c=>c.si===i);
+function carteA(si,code){return S.cartes.find(c=>c.si===si&&String(c.n)===String(code))}
+function manquantes(s){return cartesDe(s.i).filter(c=>c.st==='m').length+s.nl}
+function obtenues(s){return s.total-manquantes(s)}
+function totalTout(){return S.series.reduce((a,s)=>a+s.total,0)}
+function manqTout(){return S.series.reduce((a,s)=>a+manquantes(s),0)}
+
+function planche(s){
+  const sp=new Set(s.sp||[]);
+  let maxN=0;
+  cartesDe(s.i).forEach(c=>{const v=Number(c.n); if(Number.isFinite(v)&&String(c.n).trim()!==''){maxN=Math.max(maxN,v)}else{sp.add(String(c.n))}});
+  const spA=[...sp];
+  let nn=Math.max(s.total-spA.length,maxN);
+  const codes=[];
+  for(let i=1;i<=nn;i++)codes.push(String(i));
+  return {codes,speciales:spA,nn};
+}
+function etat(s,code){
+  const c=carteA(s.i,code);
+  if(c)return c.st==='m'?'manquante':'obtenue';
+  return s.nl>0?'indeterminee':'possedee';
+}
+
+/* ===== sauvegarde ===== */
+function save(){clearTimeout(tmr);tmr=setTimeout(()=>store.set(CLE,S),260)}
+function snap(){return JSON.parse(JSON.stringify({series:S.series,cartes:S.cartes}))}
+function agir(txt,fn){
+  const av=snap(); fn(); undo=av; save(); tout();
+  $('#toastTxt').textContent=txt; $('#toast').classList.add('on');
+  clearTimeout(agir._t); agir._t=setTimeout(()=>$('#toast').classList.remove('on'),5200);
+}
+$('#toastBtn').onclick=()=>{
+  if(!undo)return;
+  S.series=undo.series; S.cartes=undo.cartes; undo=null;
+  save(); tout(); $('#toast').classList.remove('on');
+};
+
+/* ===== rendu global ===== */
+function tout(){entete();rPlanches();rCartes();rAchats();rStats()}
+
+function entete(){
+  const t=totalTout(), m=manqTout(), o=t-m, p=t?o/t:0;
+  $('#jPct').textContent=(p*100).toFixed(1).replace('.',',')+' %';
+  $('#jFill').style.width=(p*100)+'%';
+  $('#jTxt').innerHTML=`<b class="mono">${o.toLocaleString('fr-FR')}</b> cartes sur ${t.toLocaleString('fr-FR')} · il en manque <b class="mono">${m}</b>`;
+  $('#nCartes').textContent=S.cartes.length;
+}
+
+/* ===== vue planches ===== */
+function rPlanches(){
+  const q=norm(F.q);
+  let h='';
+  ['Diamant et Perle','Platine'].forEach(ext=>{
+    const ss=S.series.filter(s=>s.ext===ext);
+    const tot=ss.reduce((a,s)=>a+s.total,0), man=ss.reduce((a,s)=>a+manquantes(s),0);
+    h+=`<div class="bloc-titre"><h2>${esc(ext)}</h2><hr><em>${tot-man} / ${tot}</em></div>`;
+    ss.forEach(s=>{
+      const {codes,speciales}=planche(s);
+      const man=manquantes(s), obt=obtenues(s), pct=s.total?obt/s.total*100:0;
+      let touche=0;
+      const cell=code=>{
+        const st=etat(s,code), c=carteA(s.i,code);
+        let cls='case '+st+(isNaN(Number(code))?' sp':'');
+        if(q){
+          const ok=c?(norm(c.nom).includes(q)||norm(c.n)===q||norm(c.r).includes(q)):norm(String(code))===q;
+          const okS=norm(s.nom).includes(q);
+          if(ok){cls+=' trouve';touche++} else if(!okS)cls+=' fade';
+        }
+        const ti=c?`${code} · ${c.nom||'sans nom'} · ${c.r}`:`${code}`;
+        return `<button class="${cls}" data-s="${s.i}" data-c="${esc(code)}" title="${esc(ti)}" aria-label="Carte ${esc(code)} — ${st}">${esc(code)}</button>`;
+      };
+      const grille=codes.map(cell).join('')+(speciales.length?`<span style="width:10px"></span>`+speciales.map(cell).join(''):'');
+      const cache=q&&!touche&&!norm(s.nom).includes(q)&&!norm(s.ext).includes(q);
+      h+=`<article class="planche${cache?' masque':''}" data-serie="${s.i}">
+        <div class="pl-tete">
+          <span class="pl-num">${String(s.n).padStart(2,'0')}</span>
+          <div class="pl-nom"><h3>${esc(s.nom)}</h3><p>${esc(s.sortie)} · ${s.total} cartes</p></div>
+          <div class="pl-chiffres">
+            <div class="pl-chiffre"><b>${obt}</b><span>possédées</span></div>
+            <div class="pl-chiffre manque"><b>${man}</b><span>manquantes</span></div>
+            <div class="pl-chiffre pct"><b>${pct.toFixed(0)}%</b><span>complète</span></div>
+          </div>
+        </div>
+        <div class="pl-rail"><div style="width:${pct}%"></div></div>
+        <div class="grille">${grille}</div>
+        ${s.nl>0?`<div class="avis"><b>Série non inventoriée.</b> Vous possédez ${obt} carte${obt>1?'s':''} sur ${s.total}, sans savoir lesquelles : toutes les cases restent hachurées. Cliquez-en une pour trancher, l’inventaire se fait au fur et à mesure. Reste ${s.nl} carte${s.nl>1?'s':''} à situer.</div>`:''}
+      </article>`;
+    });
+  });
+  h+=`<div class="legende">
+    <span><i style="background:var(--platine-2);border:1px solid var(--platine)"></i>possédée</span>
+    <span><i style="background:var(--manquant)"></i>manquante</span>
+    <span><i style="background:var(--acquis)"></i>obtenue récemment</span>
+    <span><i style="background:repeating-linear-gradient(45deg,var(--platine-2),var(--platine-2) 3px,var(--indet) 3px,var(--indet) 5px)"></i>à inventorier</span>
+    <span style="color:var(--encre-3)">Cliquez n’importe quelle case pour la changer.</span>
+  </div>`;
+  $('#v-planches').innerHTML=h;
+  $$('#v-planches .case').forEach(b=>b.onclick=()=>ouvrir(+b.dataset.s,b.dataset.c,b));
+}
+
+/* ===== tiroir ===== */
+let cible=null;
+function ouvrir(si,code,el){
+  cible={si,code,el};
+  const s=serie(si), c=carteA(si,code), st=etat(s,code);
+  const libSt={manquante:'Il vous manque cette carte',obtenue:'Obtenue',possedee:'Vous l’avez',indeterminee:'Statut inconnu'}[st];
+  const q=encodeURIComponent(((c&&c.nom)||'')+' '+s.nom+' pokemon');
+  let corps='';
+  if(st==='manquante'){
+    corps=`<button class="btn vert" data-act="jai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 13 4 4L19 7"/></svg>Je l’ai trouvée</button>`;
+  }else if(st==='obtenue'){
+    corps=`<div class="avis" style="margin:0 0 10px">Marquée obtenue${c.d?' le '+frDate(c.d):''}.</div>
+      <button class="btn" data-act="remanque">Finalement, elle me manque</button>`;
+  }else if(st==='possedee'){
+    corps=`<button class="btn rouge" data-act="manque">Elle me manque</button>`;
+  }else{
+    corps=`<button class="btn vert" data-act="indet-jai">Je l’ai</button>
+           <button class="btn rouge" data-act="indet-manque">Elle me manque</button>`;
+  }
+  let form='';
+  if(c){
+    form=`<div class="ti-bloc"><span class="eyebrow">Fiche</span>
+      <label class="champ-l"><span>Nom de la carte</span><input id="fNom" value="${esc(c.nom)}" placeholder="À compléter"></label>
+      <div class="rangee">
+        <label class="champ-l"><span>Rareté</span><select id="fRar">${RARETES.map(r=>`<option${r===c.r?' selected':''}>${r}</option>`).join('')}</select></label>
+        <label class="champ-l"><span>Priorité</span><select id="fPri"><option value="">—</option>${Object.keys(PRIOS).map(p=>`<option${p===c.pr?' selected':''}>${p}</option>`).join('')}</select></label>
+      </div>
+      <div class="rangee">
+        <label class="champ-l"><span>Prix payé (€)</span><input id="fPrix" type="number" step="0.01" min="0" value="${c.px??''}"></label>
+        <label class="champ-l"><span>Obtenue le</span><input id="fDate" type="date" value="${c.d||''}"></label>
+      </div>
+      <label class="champ-l"><span>Note</span><input id="fNote" value="${esc(c.note||'')}" placeholder="État, vendeur, échange…"></label>
+      <div class="rangee"><button class="btn mini" data-act="enreg">Enregistrer la fiche</button>
+      <button class="btn mini danger" data-act="suppr">Retirer de la liste</button></div>
+    </div>`;
+  }
+  const liens=st==='manquante'||st==='indeterminee'?`<div class="ti-bloc"><span class="eyebrow">Chercher à l’achat</span>
+    <a class="btn" target="_blank" rel="noopener" href="https://www.cardmarket.com/fr/Pokemon/Products/Search?searchString=${q}">Cardmarket</a>
+    <a class="btn" target="_blank" rel="noopener" href="https://www.ebay.fr/sch/i.html?_nkw=${q}">eBay</a>
+    <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/search?q=${q}+carte">Recherche web</a></div>`:'';
+  $('#tiroir').innerHTML=`
+    <div class="ti-tete">
+      <span class="gros" style="color:${st==='manquante'?'var(--manquant)':st==='obtenue'?'var(--acquis)':'var(--encre-3)'}">${esc(code)}</span>
+      <div style="flex:1"><h3>${esc((c&&c.nom)||'Carte n°'+code)}</h3>
+        <p>${esc(s.nom)} · ${esc(s.ext)}${c?' · '+esc(c.r):''}</p>
+        <p style="margin-top:5px;color:var(--encre-2)">${libSt}</p></div>
+      <button class="ico" data-act="fermer" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="ti-corps"><div class="ti-bloc">${corps}</div>${form}${liens}</div>`;
+  $('#tiroir').classList.add('on'); $('#voile').classList.add('on');
+  $$('#tiroir [data-act]').forEach(b=>b.onclick=()=>action(b.dataset.act));
+}
+function fermer(){$('#tiroir').classList.remove('on');$('#voile').classList.remove('on');cible=null}
+$('#voile').onclick=fermer;
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')fermer();
+  const saisie=/^(INPUT|TEXTAREA|SELECT)$/.test((e.target.tagName||''));
+  if(e.key==='/'&&!saisie){e.preventDefault();$('#q').focus()}
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#q').focus()}
+});
+
+function nouvelleCarte(si,code,r){
+  const s=serie(si);
+  return {id:Math.max(0,...S.cartes.map(c=>c.id))+1,si,r:r||'Commune',n:String(code),nom:'',st:'m',pr:'',d:null,px:null,note:''};
+}
+function action(a){
+  const {si,code,el}=cible||{}; const s=serie(si); let c=carteA(si,code);
+  if(a==='fermer')return fermer();
+  if(a==='jai'){agir(`Carte ${code} de ${s.nom} marquée obtenue.`,()=>{c.st='o';c.d=jour()});pulse();fermer();return}
+  if(a==='remanque'){agir(`Carte ${code} remise en manquante.`,()=>{c.st='m';c.d=null});fermer();return}
+  if(a==='manque'){agir(`Carte ${code} ajoutée aux manquantes.`,()=>S.cartes.push(nouvelleCarte(si,code)));fermer();
+    setTimeout(()=>{const b=document.querySelector(`.case[data-s="${si}"][data-c="${CSS.escape(code)}"]`);if(b)ouvrir(si,code,b)},60);return}
+  if(a==='indet-jai'){agir(`Carte ${code} enregistrée comme possédée.`,()=>{s.nl=Math.max(0,s.nl-1)});fermer();return}
+  if(a==='indet-manque'){agir(`Carte ${code} enregistrée comme manquante.`,()=>{s.nl=Math.max(0,s.nl-1);S.cartes.push(nouvelleCarte(si,code))});fermer();return}
+  if(a==='suppr'){agir(`Carte ${code} retirée de la liste.`,()=>{S.cartes=S.cartes.filter(x=>x!==c)});fermer();return}
+  if(a==='enreg'){
+    agir('Fiche enregistrée.',()=>{
+      c.nom=$('#fNom').value.trim(); c.r=$('#fRar').value; c.pr=$('#fPri').value;
+      const p=parseFloat($('#fPrix').value); c.px=isNaN(p)?null:p;
+      c.d=$('#fDate').value||null; c.note=$('#fNote').value.trim();
+    });
+    fermer();return;
+  }
+}
+function pulse(){
+  const {si,code}=cible||{};
+  setTimeout(()=>{const b=document.querySelector(`.case[data-s="${si}"][data-c="${CSS.escape(String(code))}"]`);
+    if(b){b.classList.add('pop');setTimeout(()=>b.classList.remove('pop'),340)}},40);
+}
+
+/* ===== vue cartes ===== */
+function rFiltres(){
+  $('#filtres').innerHTML=`
+    <button class="puce" data-st="m" aria-pressed="${F.statut==='m'}">Manquantes</button>
+    <button class="puce" data-st="o" aria-pressed="${F.statut==='o'}">Obtenues</button>
+    <button class="puce" data-st="" aria-pressed="${F.statut===''}">Toutes</button>
+    <span class="sep"></span>
+    ${RARETES.map(r=>`<button class="puce" data-rar="${r}" aria-pressed="${F.rar.has(r)}"><i style="background:${cR(r)}"></i>${r}</button>`).join('')}
+    <span class="sep"></span>
+    <select class="puce" id="fSerie"><option value="">Toutes les séries</option>${S.series.map(s=>`<option value="${s.i}"${F.serie==String(s.i)?' selected':''}>${esc(s.nom)}</option>`).join('')}</select>
+    <select class="puce" id="fPrio"><option value="">Toutes priorités</option>${Object.keys(PRIOS).map(p=>`<option${F.prio===p?' selected':''}>${p}</option>`).join('')}</select>
+    <span class="compte" id="cCompte"></span>`;
+  $$('#filtres [data-st]').forEach(b=>b.onclick=()=>{F.statut=b.dataset.st;rFiltres();rCartes()});
+  $$('#filtres [data-rar]').forEach(b=>b.onclick=()=>{
+    const r=b.dataset.rar; F.rar.has(r)?F.rar.delete(r):F.rar.add(r); rFiltres(); rCartes();
+  });
+  $('#fSerie').onchange=e=>{F.serie=e.target.value;rCartes()};
+  $('#fPrio').onchange=e=>{F.prio=e.target.value;rCartes()};
+}
+function filtrees(){
+  const q=norm(F.q);
+  return S.cartes.filter(c=>{
+    const s=serie(c.si);
+    if(F.statut&&c.st!==F.statut)return false;
+    if(F.rar.size&&!F.rar.has(c.r))return false;
+    if(F.serie!==''&&String(c.si)!==F.serie)return false;
+    if(F.prio&&c.pr!==F.prio)return false;
+    if(q&&!(norm(c.nom).includes(q)||norm(c.n).startsWith(q)||norm(c.r).includes(q)||norm(s.nom).includes(q)||norm(s.ext).includes(q)))return false;
+    return true;
+  });
+}
+function rCartes(){
+  if(!$('#filtres').children.length)rFiltres();
+  const L=filtrees(), o={cle:tri.cle,s:tri.sens};
+  L.sort((a,b)=>{
+    let x,y;
+    if(o.cle==='serie'){x=[a.si,RARETES.indexOf(a.r),num(a.n)];y=[b.si,RARETES.indexOf(b.r),num(b.n)];
+      for(let i=0;i<3;i++){if(x[i]!==y[i])return (x[i]<y[i]?-1:1)*o.s}return 0}
+    if(o.cle==='n'){return (num(a.n)-num(b.n))*o.s}
+    if(o.cle==='r'){return (RARETES.indexOf(a.r)-RARETES.indexOf(b.r))*o.s}
+    x=norm(a[o.cle]);y=norm(b[o.cle]);return x<y?-o.s:x>y?o.s:0;
+  });
+  const tb=$('#tbCartes');
+  if(!L.length){tb.innerHTML=`<tr><td colspan="7"><div class="vide"><b>Aucune carte ne correspond</b>Changez un filtre ou effacez la recherche.</div></td></tr>`}
+  else tb.innerHTML=L.map(c=>{
+    const s=serie(c.si), fait=c.st==='o';
+    return `<tr class="${fait?'fait':''}">
+      <td style="white-space:nowrap"><span style="color:var(--encre-3);font-size:11px">${String(s.n).padStart(2,'0')}</span> ${esc(s.nom)}</td>
+      <td class="mono" style="font-weight:600">${esc(c.n)}</td>
+      <td class="nom">${esc(c.nom)||'<span style="color:var(--encre-3)">nom à compléter</span>'}</td>
+      <td><span class="tag" style="background:${cR(c.r)}">${esc(c.r)}</span></td>
+      <td class="col-opt">${c.pr?`<span class="tag" style="background:${PRIOS[c.pr]}">${c.pr}</span>`:'<span style="color:var(--encre-3)">—</span>'}</td>
+      <td>${fait?`<span class="tag" style="background:var(--acquis)">Obtenue</span>`:`<span class="tag tagf">Manquante</span>`}</td>
+      <td><button class="coche${fait?' on':''}" data-id="${c.id}" aria-label="Basculer obtenue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 13 4 4L19 7"/></svg></button></td>
+    </tr>`}).join('');
+  const cc=$('#cCompte'); if(cc)cc.textContent=L.length+' carte'+(L.length>1?'s':'');
+  $$('#tbCartes .coche').forEach(b=>b.onclick=()=>{
+    const c=S.cartes.find(x=>x.id==b.dataset.id), s=serie(c.si);
+    agir(c.st==='m'?`${c.nom||'Carte '+c.n} marquée obtenue.`:`${c.nom||'Carte '+c.n} remise en manquante.`,
+      ()=>{if(c.st==='m'){c.st='o';c.d=jour()}else{c.st='m';c.d=null}});
+  });
+  $$('#tbCartes .nom, #tbCartes td:first-child').forEach(td=>{
+    const b=td.parentElement.querySelector('.coche'); if(!b)return;
+    td.style.cursor='pointer';
+    td.onclick=()=>{const c=S.cartes.find(x=>x.id==b.dataset.id); if(c)ouvrir(c.si,c.n)};
+  });
+}
+const num=v=>{const n=Number(v);return Number.isFinite(n)?n:9000+String(v).charCodeAt(0)*10+(parseInt(String(v).replace(/\D/g,''))||0)};
+$$('thead th[data-tri]').forEach(th=>th.onclick=()=>{
+  const k=th.dataset.tri; tri.sens=tri.cle===k?-tri.sens:1; tri.cle=k; rCartes();
+});
+
+/* ===== vue achats ===== */
+function rAchats(){
+  const parS={};
+  S.cartes.filter(c=>c.st==='m').forEach(c=>{(parS[c.si]=parS[c.si]||[]).push(c)});
+  let listes='';
+  S.series.forEach(s=>{
+    const L=(parS[s.i]||[]).sort((a,b)=>RARETES.indexOf(a.r)-RARETES.indexOf(b.r)||num(a.n)-num(b.n));
+    if(!L.length&&!s.nl)return;
+    listes+=`<div class="liste-achat">
+      <div class="la-tete"><b>${esc(s.nom)}</b><span style="font-size:11.5px;color:var(--encre-3)">${esc(s.ext)}</span><em>${L.length+s.nl} à trouver</em></div>
+      <div class="la-corps">
+        ${L.map(c=>{
+          const q=encodeURIComponent((c.nom||'')+' '+s.nom+' pokemon');
+          return `<div class="la-ligne">
+            <span class="la-num" style="color:${cR(c.r)}">${esc(c.n)}</span>
+            <span class="la-nom">${esc(c.nom)||'<span style="color:var(--encre-3)">nom à compléter</span>'}
+              <span style="color:var(--encre-3);font-size:11px"> · ${esc(c.r)}</span>
+              ${c.pr?`<span class="tag" style="background:${PRIOS[c.pr]};margin-left:6px">${c.pr}</span>`:''}</span>
+            <a class="lien" target="_blank" rel="noopener" href="https://www.cardmarket.com/fr/Pokemon/Products/Search?searchString=${q}">Cardmarket</a>
+            <a class="lien" target="_blank" rel="noopener" href="https://www.ebay.fr/sch/i.html?_nkw=${q}">eBay</a>
+          </div>`}).join('')}
+        ${s.nl?`<div class="la-ligne" style="color:var(--encre-3)"><span class="la-num">?</span><span class="la-nom">${s.nl} cartes à identifier — passez par la planche pour les inventorier</span></div>`:''}
+      </div></div>`;
+  });
+  const cnt={}; RARETES.forEach(r=>cnt[r]=0);
+  S.cartes.filter(c=>c.st==='m').forEach(c=>cnt[c.r]=(cnt[c.r]||0)+1);
+  const budget=RARETES.reduce((a,r)=>a+(parseFloat(S.prix[r])||0)*cnt[r],0);
+  const depense=S.cartes.reduce((a,c)=>a+(parseFloat(c.px)||0),0);
+  $('#v-achats').innerHTML=`<div class="deux">
+    <div>
+      <div class="bloc-titre no-print"><h2>À trouver</h2><hr><em>${manqTout()} cartes</em></div>
+      ${listes||'<div class="panneau"><div class="vide"><b>Rien à acheter</b>La collection est complète.</div></div>'}
+    </div>
+    <div>
+      <div class="panneau no-print">
+        <h3>Estimer le budget</h3>
+        <p style="font-size:12px;color:var(--encre-2);margin:0 0 12px">Entrez le prix moyen que vous constatez par rareté. Rien n’est pré-rempli : ce sont vos chiffres.</p>
+        ${RARETES.map(r=>`<div class="prix-ligne">
+          <label for="p-${r}"><i style="width:9px;height:9px;border-radius:3px;background:${cR(r)};display:inline-block"></i>${r}</label>
+          <em>×${cnt[r]}</em>
+          <input id="p-${r}" data-r="${r}" type="number" min="0" step="0.1" value="${S.prix[r]??''}" placeholder="—">
+        </div>`).join('')}
+        <div class="total"><span>Budget pour terminer</span><b>${budget?budget.toLocaleString('fr-FR',{style:'currency',currency:'EUR'}):'—'}</b></div>
+        <div class="total" style="border:0;padding-top:4px"><span style="font-size:12px;color:var(--encre-2)">Déjà dépensé (saisi)</span>
+          <b style="font-size:14px">${depense?depense.toLocaleString('fr-FR',{style:'currency',currency:'EUR'}):'—'}</b></div>
+        <button class="btn mini" style="width:100%;margin-top:12px" onclick="window.print()">Imprimer la liste</button>
+      </div>
+    </div></div>`;
+  $$('#v-achats input[data-r]').forEach(i=>i.oninput=()=>{
+    S.prix[i.dataset.r]=i.value; save();
+    const b=RARETES.reduce((a,r)=>a+(parseFloat(S.prix[r])||0)*cnt[r],0);
+    $('#v-achats .total b').textContent=b?b.toLocaleString('fr-FR',{style:'currency',currency:'EUR'}):'—';
+  });
+}
+
+/* ===== vue stats ===== */
+function rStats(){
+  const cnt={}; RARETES.forEach(r=>cnt[r]=0);
+  S.cartes.filter(c=>c.st==='m').forEach(c=>cnt[c.r]++);
+  const nl=S.series.reduce((a,s)=>a+s.nl,0), tot=manqTout();
+  const rangs=[...S.series].filter(s=>manquantes(s)>0).sort((a,b)=>manquantes(a)-manquantes(b)).slice(0,5);
+  const faites=S.cartes.filter(c=>c.st==='o').sort((a,b)=>(b.d||'').localeCompare(a.d||'')).slice(0,8);
+  $('#v-stats').innerHTML=`
+  <div class="stats-grille">
+    <div class="panneau" style="grid-column:1/-1">
+      <h3>Progression série par série</h3>
+      ${[...S.series].sort((a,b)=>obtenues(b)/b.total-obtenues(a)/a.total).map(s=>{
+        const p=obtenues(s)/s.total*100;
+        return `<div class="bar-serie"><span class="n">${esc(s.nom)}</span>
+          <span class="r"><div style="width:${p}%;background:${p>=100?'var(--acquis)':'var(--diamant)'}"></div></span>
+          <span class="v">${obtenues(s)}/${s.total} · ${p.toFixed(0)}%</span></div>`}).join('')}
+    </div>
+    <div class="panneau">
+      <h3>Ce qu’il manque, par rareté</h3>
+      <div class="empile">
+        ${RARETES.map(r=>cnt[r]?`<div style="flex:${cnt[r]};background:${cR(r)}" title="${r} : ${cnt[r]}"></div>`:'').join('')}
+        ${nl?`<div style="flex:${nl};background:repeating-linear-gradient(45deg,var(--indet),var(--indet) 4px,var(--platine-2) 4px,var(--platine-2) 7px)"></div>`:''}
+      </div>
+      <div class="leg-rar">
+        ${RARETES.map(r=>`<div><i style="background:${cR(r)}"></i>${r}<b>${cnt[r]}</b><em>${tot?(cnt[r]/tot*100).toFixed(0):0}%</em></div>`).join('')}
+        ${nl?`<div><i style="background:var(--indet)"></i>À identifier<b>${nl}</b><em>${(nl/tot*100).toFixed(0)}%</em></div>`:''}
+      </div>
+    </div>
+    <div class="panneau">
+      <h3>Les plus proches d’être finies</h3>
+      ${rangs.map((s,i)=>`<div class="bar-serie" style="grid-template-columns:22px 1fr 74px">
+        <span class="mono" style="color:var(--encre-3);font-size:12px">${i+1}</span>
+        <span class="n">${esc(s.nom)}</span>
+        <span class="v" style="color:var(--manquant);font-weight:600">${manquantes(s)} à trouver</span></div>`).join('')
+        ||'<p style="font-size:13px;color:var(--encre-3)">Tout est complet.</p>'}
+      <h3 style="margin-top:20px">Dernières cartes obtenues</h3>
+      ${faites.length?faites.map(c=>`<div class="bar-serie" style="grid-template-columns:44px 1fr 74px">
+        <span class="mono" style="font-weight:600;color:var(--acquis)">${esc(c.n)}</span>
+        <span class="n">${esc(c.nom)||'<span style="color:var(--encre-3)">sans nom</span>'} <span style="color:var(--encre-3);font-size:11px">· ${esc(serie(c.si).nom)}</span></span>
+        <span class="v">${c.d?frDate(c.d):'—'}</span></div>`).join('')
+        :'<p style="font-size:13px;color:var(--encre-3)">Aucune carte cochée pour l’instant.</p>'}
+    </div>
+  </div>`;
+}
+
+/* ===== données ===== */
+function rDonnees(){
+  cible=null;
+  $('#tiroir').innerHTML=`
+    <div class="ti-tete"><div style="flex:1"><h3>Données et sauvegarde</h3>
+      <p>Tout est stocké dans ce navigateur uniquement.</p></div>
+      <button class="ico" id="xF" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+    <div class="ti-corps">
+      <div class="ti-bloc"><span class="eyebrow">Exporter</span>
+        <button class="btn" id="eJson">Sauvegarde complète (.json)</button>
+        <button class="btn" id="eCsv">Liste des cartes (.csv, pour Excel)</button></div>
+      <div class="ti-bloc"><span class="eyebrow">Importer</span>
+        <label class="btn" for="iJson" style="cursor:pointer">Restaurer une sauvegarde .json</label>
+        <input id="iJson" type="file" accept=".json,application/json" hidden></div>
+      <div class="ti-bloc"><span class="eyebrow">Taille des séries</span>
+        <p style="font-size:12px;color:var(--encre-2);margin:0 0 10px">Le nombre total de cartes de chaque set. Ajustez si votre édition diffère.</p>
+        ${S.series.map(s=>`<div class="prix-ligne"><label>${esc(s.nom)}</label>
+          <input data-tot="${s.i}" type="number" min="1" value="${s.total}"></div>`).join('')}</div>
+      <div class="ti-bloc"><span class="eyebrow">Repartir de zéro</span>
+        <button class="btn danger" id="reset">Restaurer les données d’origine</button>
+        <p style="font-size:11.5px;color:var(--encre-3);margin:6px 0 0">Remet les 228 cartes du fichier Excel et efface vos modifications.</p></div>
+    </div>`;
+  $('#tiroir').classList.add('on'); $('#voile').classList.add('on');
+  $('#xF').onclick=fermer;
+  $('#eJson').onclick=()=>tel(JSON.stringify(S,null,1),'collection-pokemon.json','application/json');
+  $('#eCsv').onclick=()=>{
+    const l=[['Extension','Serie','Rarete','Numero','Nom','Statut','Priorite','Date','Prix','Note']];
+    S.cartes.forEach(c=>{const s=serie(c.si);
+      l.push([s.ext,s.nom,c.r,c.n,c.nom,c.st==='m'?'Manquante':'Obtenue',c.pr,c.d||'',c.px??'',c.note||''])});
+    tel('\ufeff'+l.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(';')).join('\n'),'cartes-pokemon.csv','text/csv');
+  };
+  $('#iJson').onchange=e=>{
+    const f=e.target.files[0]; if(!f)return;
+    const rd=new FileReader();
+    rd.onload=()=>{try{const o=JSON.parse(rd.result);
+      if(!o.series||!o.cartes)throw 0;
+      S=o; save(); tout(); fermer();
+      $('#toastTxt').textContent='Sauvegarde restaurée.'; $('#toast').classList.add('on');
+      setTimeout(()=>$('#toast').classList.remove('on'),3500);
+    }catch(err){alert('Ce fichier n’est pas une sauvegarde valide.')}};
+    rd.readAsText(f);
+  };
+  $$('#tiroir [data-tot]').forEach(i=>i.onchange=()=>{
+    const s=serie(+i.dataset.tot), v=parseInt(i.value)||s.total;
+    s.total=v; save(); entete(); rPlanches(); rStats();
+  });
+  $('#reset').onclick=()=>{
+    if(!confirm('Effacer vos modifications et revenir aux données du fichier Excel ?'))return;
+    S=neuf(); save(); tout(); fermer();
+  };
+}
+function tel(txt,nom,type){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([txt],{type})); a.download=nom; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+}
+
+/* ===== navigation ===== */
+$$('.onglet').forEach(b=>b.onclick=()=>{
+  $$('.onglet').forEach(x=>x.setAttribute('aria-selected',x===b));
+  vue=b.dataset.vue;
+  $$('.vue').forEach(v=>v.classList.toggle('on',v.id==='v-'+vue));
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+let tq=null;
+$('#q').oninput=e=>{const v=e.target.value.trim();clearTimeout(tq);
+  tq=setTimeout(()=>{F.q=v;rPlanches();rCartes()},110)};
+$('#bDonnees').onclick=rDonnees;
+$('#bTheme').onclick=()=>{
+  S.theme=S.theme==='nuit'?'jour':'nuit';
+  document.documentElement.dataset.theme=S.theme; save();
+};
+
+/* ===== démarrage ===== */
+(async function(){
+  const sv=await store.get(CLE);
+  S=(sv&&sv.v===1&&sv.series&&sv.cartes)?sv:neuf();
+  S.prix=S.prix||{};
+  document.documentElement.dataset.theme=S.theme||'jour';
+  tout();
+})();
+</script>
+</body>
+</html>
